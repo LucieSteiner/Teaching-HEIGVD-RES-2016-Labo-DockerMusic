@@ -23,17 +23,13 @@ function sendJson(socket) {
 	for(var key of autreTableau.keys()){
 		var message = new Object(); 
 		message.uuid = key;
-		message.instrument = autreTableau.get(key).instrument;
+		message.instrument = instrumentSounds.get(autreTableau.get(key).instrument);
 		message.activeSince = autreTableau.get(key).activeSince;
-		var payload = JSON.stringify(message);
-		infos.push(payload);
+		infos.push(message);
 	}
-	var finalPayload = JSON.stringify(infos)
-	socket.write(finalPayload);
-	socket.end();
-	
-	
-	
+	var payload = JSON.stringify(infos)
+	socket.write(payload);
+	socket.end();	
 }
 
 
@@ -81,7 +77,7 @@ setInterval(function(){
 
 	for(var key of activeInstruments.keys()){
 		var diff = moment() - activeInstruments.get(key);
-		if(diff > 5){
+		if(diff > 5000){
 			activeInstruments.delete(key);
 			autreTableau.delete(key);
 		}
